@@ -10,9 +10,14 @@ export class Sock {
     private client: CompatClient | undefined;
     private roomId: string | undefined;
     private subscriptions: StompSubscription[] = [];
+    private instance;
 
     private constructor() {
         this.instance = new SockJS(import.meta.env.VITE_SERVER_URL + 'ws');
+    }
+
+    public getInstance() {
+        return this.instance;
     }
 
     public static createInstance(): Sock {

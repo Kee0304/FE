@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction, } from "react"
 
-const RoomHeader = ({onIconClicked, snapshotTitle, setSnapshotTitle }: {onIconClicked:Function, snapshotTitle:string, setSnapshotTitle:Dispatch<SetStateAction<string>> }) => {
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const RoomHeader = ({onIconClicked, snapshotTitle, setSnapshotTitle }: {onIconClicked:any, snapshotTitle:string, setSnapshotTitle:Dispatch<SetStateAction<string>> }) => {
   const updateSnapshotTitle = (e:React.ChangeEvent<HTMLInputElement>) => {
     setSnapshotTitle(e.target.value);
   }
