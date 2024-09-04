@@ -1,9 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
-import { json, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { CodeSnapshot } from '../../model/CodeSnapshot';
-import { CodeSnapshotRepository } from '../../services/CodeSnapshotRepository';
-import { CommentRepository } from '../../services/CommentRepository';
-import { Comment } from '../../model/Comment';
 import Drawer from '../../components/GlassDrawer/Drawer';
 import RoomHeader from '../../components/RoomHeader';
 import CodeEditor from '../../components/CodeEditor/CodeEditor';
@@ -11,7 +8,6 @@ import { Sock } from '../../utils/socket/Socket';
 import { RoomInfo } from '../../model/RoomInfo';
 import { AxiosResponse } from 'axios';
 import axi from '../../utils/axios/Axios';
-import Calendar from '../../components/Calendar/Calendar';
 import CodeSnapshotUI from '../../components/CodeSnapshot/CodeSnapshotUI';
 import { IMessage } from '@stomp/stompjs';
 import { Map } from 'immutable';
@@ -52,6 +48,7 @@ const RoomPage = () => {
   // 코드 스냅샷 확인 후 되돌리기 위해 이전 코드를 저장
   const [prevCode, setPrevCode] = useState<string|undefined>(undefined);
   // 스냅샷들 (년:월:일:[])
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const initialSnapshots:Map<string, Map<string, Map<string, any>>> = Map([
     [stringYear, Map([
       [stringMonth, Map([
@@ -60,6 +57,7 @@ const RoomPage = () => {
     ])]
   ]);
   // 스냅샷들
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [snapshots, setSnapshots] = useState<Map<string, Map<string, Map<string, any>>>>(initialSnapshots);
   // 선택된 날짜에 존재하는 코드 스냅샷들
   const [dailySanpshots, setDailySnapshots] = useState<CodeSnapshot[]>([]);
@@ -103,7 +101,8 @@ const RoomPage = () => {
     setPrevCode(code);
   }
 
-  const restoreCode = (e:React.MouseEvent<HTMLSpanElement, MouseEvent>):void => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const restoreCode = (_e:React.MouseEvent<HTMLSpanElement, MouseEvent>):void => {
     setIsReceived(true);
     if (prevCode) {
       setCode(prevCode);
@@ -143,6 +142,7 @@ const RoomPage = () => {
         return nextState;
     });
     setDailySnapshots((prevData) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const jsonMessage:any = JSON.parse(message.toString())
       const lastSnapshot:CodeSnapshot = new CodeSnapshot(
         jsonMessage.title,
@@ -166,7 +166,8 @@ const RoomPage = () => {
 
     // 오늘자 스냅샷
     const dailySnapshotsResponse:AxiosResponse = await axi.get(`room/${params.roomId}/snapshot/${year}/${month}/${date}`);
-    const todayDailySnapshots:CodeSnapshot[] = dailySnapshotsResponse.data.map((el => CodeSnapshot.fromJson(el)));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const todayDailySnapshots:CodeSnapshot[] = dailySnapshotsResponse.data.map(((el:any) => CodeSnapshot.fromJson(el)));
     setSnapshots((prevData) => {
     const nextState = prevData.setIn([stringYear, stringMonth, stringDate], todayDailySnapshots);
         return nextState;
@@ -201,6 +202,7 @@ const RoomPage = () => {
 
   const updateSnapshots = async ():Promise<void> => {    
     const response:AxiosResponse = await axi.get(`room/${params.roomId}/snapshot/${year}/${month}/${date}`);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const dailySnapshots:CodeSnapshot[] = response.data.map((el:any) => CodeSnapshot.fromJson(el));
     setSnapshots((prevData) => {
       const nextState = prevData.setIn([stringYear, stringMonth, stringDate], dailySnapshots);

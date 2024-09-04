@@ -8,13 +8,13 @@ export default function Drawer({title, children, isOpen, setOpen, code, saveSnap
     setOpen(false);
   }
 
-  let timer = useRef<number|undefined>();
+  const timer = useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
 
   const debounceSave = () => {
     if (timer.current) {
       clearTimeout(timer.current);
     } else {
-      setTimeout(() => {
+      timer.current = setTimeout(() => {
         saveSnapshot();
       },1000)
     }

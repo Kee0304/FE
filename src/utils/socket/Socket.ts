@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import { CompatClient, IMessage, Stomp, StompSubscription } from "@stomp/stompjs";
 import axi from "../axios/Axios";
 import { AxiosResponse } from "axios";
 import SockJS from "sockjs-client";
-import { Dispatch, SetStateAction } from "react";
 import { CodeSnapshot } from "../../model/CodeSnapshot";
 
 
@@ -10,7 +10,6 @@ export class Sock {
     private client: CompatClient | undefined;
     private roomId: string | undefined;
     private subscriptions: StompSubscription[] = [];
-    private instance: any;
 
     private constructor() {
         this.instance = new SockJS(import.meta.env.VITE_SERVER_URL + 'ws');
